@@ -1,13 +1,43 @@
+$fs = 0.5;
+$tol = 1;
+
+boltLength = 4;
+boltOffset = 15.5;
+wallThickness = 4;
+centerCutout = 22;
+
+module motorMount(width, thickness) {
+  // Base plate
+  difference() {
+    translate([0, 0, wallThickness / 2])
+      cube([width, width, thickness], center = true);
+
+    // screw hole mounts
+    translate([boltOffset, boltOffset, -1]){
+      cylinder(r=boltLength/2, h=wallThickness+2);
+    }
+    translate([-boltOffset, boltOffset, -1]){
+      cylinder(r=boltLength/2, h=wallThickness+2);
+    }
+    translate([-boltOffset, -boltOffset, -1]){
+      cylinder(r=boltLength/2, h=wallThickness+2);
+    }
+    translate([boltOffset, -boltOffset, -1]){
+      cylinder(r=boltLength/2, h=wallThickness+2);
+    }
+
+    // Center hole/shaft cutout
+    translate([0,0, -$tol]){
+      cylinder(r=centerCutout/2 + $tol, h=wallThickness+2);
+    }
+  }
+}
+
 module hangingMount(){
-	motorWidth = 42;
-	height = 25;
-	bolt = 4;
-	boltOffset = 15.5;
-	wallThickness = 5;
+  height = 25;
 	supportThickness = 5;
 	supportWidth = 10;
 	supportHeight = 40;
-	centerCutout = 20;
 	railInnerWidth = 15;
 	distToRail=60;
 	railOuterWidth = 18; //Replace these with real caliper values
@@ -24,7 +54,6 @@ module hangingMount(){
 		//Stuff to be added to the shape
 		union(){
 			translate([-frameWidth/2, -frameWidth/2, 0]){
-				cube([motorWidth, motorWidth, wallThickness]);
 			}
 			
 			translate([-supportXOffset, 0, wallThickness]){
@@ -43,26 +72,6 @@ module hangingMount(){
 						cube([15,10,5]);
 					}
 				}
-			}
-		}
-		//Stuff to be carved out of the added shape
-		union(){
-			translate([boltOffset, boltOffset, -1]){
-				cylinder(r=bolt/2, h=wallThickness+2);
-			}
-			translate([-boltOffset, boltOffset, -1]){
-				cylinder(r=bolt/2, h=wallThickness+2);
-			}
-			translate([-boltOffset, -boltOffset, -1]){
-				cylinder(r=bolt/2, h=wallThickness+2);
-			}
-			translate([boltOffset, -boltOffset, -1]){
-				cylinder(r=bolt/2, h=wallThickness+2);
-			}
-		
-			//Center hole/shaft cutout
-			translate([0,0, -1]){
-				cylinder(r=centerCutout/2, h=wallThickness+2);
 			}
 		}
 	}

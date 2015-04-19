@@ -1,6 +1,27 @@
 $fs = 0.5;
 $tol = 1;
 
+module roundedCube(size, radius) {
+  module centered() {
+    hull() {
+      translate([size[0] / 2  - radius,  size[1] / 2 - radius, -size[2] / 2])
+        cylinder(r = radius, h = size[2]);
+      translate([size[0] / 2  - radius, -size[1] / 2 + radius, -size[2] / 2])
+        cylinder(r = radius, h = size[2]);
+      translate([-size[0] / 2 + radius, -size[1] / 2 + radius, -size[2] / 2])
+        cylinder(r = radius, h = size[2]);
+      translate([-size[0] / 2 + radius,  size[1] / 2 - radius, -size[2] / 2])
+        cylinder(r = radius, h = size[2]);
+    }
+  }
+
+  if (center == true) {
+    centered();
+  } else {
+    translate([size[0] / 2, size[1] / 2, size[2] / 2]) centered();
+  }
+}
+
 boltLength = 4;
 boltOffset = 15.5;
 motorCutoutRadius = 11;
@@ -11,7 +32,7 @@ module motorMount(length, width, wallThickness, offsetX) {
     union() {
       // center plate
       translate([offsetX, 0, wallThickness / 2])
-        cube([width, width, wallThickness], center = true);
+        roundedCube([width, width, wallThickness], center = true, radius = 5);
 
       // attachment plate
       translate([0, 0, wallThickness / 2])
@@ -54,7 +75,7 @@ module motorHanger() {
   translate([0, hangerInsertY / 2 + hangerAttachmentY, 0]) {
     difference() {
       translate([0, 0, hangerThickness / 2])
-        cube([hangerInsertX, hangerInsertY, hangerThickness], center = true);
+        roundedCube([hangerInsertX, hangerInsertY, hangerThickness], center = true, radius = 5);
       translate([hangerCutoutCenterOffsetX, hangerCutoutCenterOffsetY, -$tol])
         cylinder(r = hangerCutoutRadius + $tol, h = hangerThickness + 2 * $tol);
     }

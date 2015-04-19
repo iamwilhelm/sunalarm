@@ -33,73 +33,28 @@ module motorMount(width, wallThickness) {
 }
 
 hangerThickness = 8;
-hangerInsertLength = 32;
-hangerInsertWidth = 30;
+hangerInsertX = 32;
+hangerInsertY = 16;
 hangerCutoutRadius = 7 / 2;
-hangercutoutOffsetLength = hangerInsertLength / 2;
-hangercutoutOffsetWidth = hangerInsertWidth / 2;
-hangerAttachmentLength = 24.5;
-hangerAttachmentWidth = 30;
+hangerCutoutCenterOffsetX = 0;
+hangerCutoutCenterOffsetY = 9.5 - hangerInsertY / 2;
+hangerAttachmentX = 24.5;
+hangerAttachmentY = 30;
 
 module motorHanger() {
   // hanger insert
-  translate([0, hangerAttachmentWidth / 2 + hangerAttachmentWidth, 0]) {
+  translate([0, hangerInsertY / 2 + hangerAttachmentY, 0]) {
     difference() {
       translate([0, 0, hangerThickness / 2])
-        cube([hangerInsertLength, hangerInsertWidth, hangerThickness], center = true);
-      translate([0, 0, -$tol])
+        cube([hangerInsertX, hangerInsertY, hangerThickness], center = true);
+      translate([hangerCutoutCenterOffsetX, hangerCutoutCenterOffsetY, -$tol])
         cylinder(r = hangerCutoutRadius + $tol, h = hangerThickness + 2 * $tol);
     }
   }
 
   // hanger attachment
-  translate([-hangerAttachmentLength / 2, 0, 0])
-    cube([hangerAttachmentLength, hangerAttachmentWidth + 2 * $tol, hangerThickness]);
+  translate([-hangerAttachmentX / 2, 0, 0])
+    cube([hangerAttachmentX, hangerAttachmentY + 2 * $tol, hangerThickness]);
 }
 
-module hangingMount(){
-  height = 25;
-	supportThickness = 5;
-	supportWidth = 10;
-	supportHeight = 40;
-	railInnerWidth = 15;
-	distToRail=60;
-	railOuterWidth = 18; //Replace these with real caliper values
-	underslungHeight = 20;
-	frameWidth = motorWidth;
-
-	supportXOffset = frameWidth/2;
-	supportYOffset = -supportWidth/2;
-
-	distToSupportOuter = supportXOffset+supportThickness/2;
-	supportAngle = atan(distToRail/distToSupportOuter);
-	
-	difference(){
-		//Stuff to be added to the shape
-		union(){
-			translate([-frameWidth/2, -frameWidth/2, 0]){
-			}
-			
-			translate([-supportXOffset, 0, wallThickness]){
-				rotate([0, 90-supportAngle, 0]){
-					cube([supportThickness, supportWidth, supportHeight]);
-					translate([-10,0,supportHeight]){
-						cube([15,10,5]);
-					}
-				}
-			}
-			
-			translate([supportXOffset, 0, wallThickness]){
-				rotate([0, 90-supportAngle, 180]){
-					cube([supportThickness, supportWidth, supportHeight]);
-					translate([-10,0,supportHeight]){
-						cube([15,10,5]);
-					}
-				}
-			}
-		}
-	}
-	
-}
-
-hangingMount();
+motorHanger();

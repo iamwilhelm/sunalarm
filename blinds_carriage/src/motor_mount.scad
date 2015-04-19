@@ -5,31 +5,39 @@ boltLength = 4;
 boltOffset = 15.5;
 motorCutoutRadius = 11;
 
-module motorMount(width, wallThickness) {
+module motorMount(length, width, wallThickness, offsetX) {
   // Base plate
   difference() {
-    translate([0, 0, wallThickness / 2])
-      cube([width, width, wallThickness], center = true);
+    union() {
+      // center plate
+      translate([offsetX, 0, wallThickness / 2])
+        cube([width, width, wallThickness], center = true);
+
+      // attachment plate
+      translate([0, 0, wallThickness / 2])
+        cube([length, width / 2, wallThickness], center = true);
+    }
 
     // screw hole mounts
-    translate([boltOffset, boltOffset, -1]){
+    translate([boltOffset + offsetX, boltOffset, -1]){
       cylinder(r=boltLength/2, h=wallThickness+2);
     }
-    translate([-boltOffset, boltOffset, -1]){
+    translate([-boltOffset + offsetX, boltOffset, -1]){
       cylinder(r=boltLength/2, h=wallThickness+2);
     }
-    translate([-boltOffset, -boltOffset, -1]){
+    translate([-boltOffset + offsetX, -boltOffset, -1]){
       cylinder(r=boltLength/2, h=wallThickness+2);
     }
-    translate([boltOffset, -boltOffset, -1]){
+    translate([boltOffset + offsetX, -boltOffset, -1]){
       cylinder(r=boltLength/2, h=wallThickness+2);
     }
 
     // Center hole/shaft cutout
-    translate([0, 0, -$tol]){
+    translate([offsetX, 0, -$tol]){
       cylinder(r = motorCutoutRadius + $tol, h = wallThickness + 2 * $tol);
     }
   }
+
 }
 
 hangerThickness = 8;
@@ -57,4 +65,4 @@ module motorHanger() {
     cube([hangerAttachmentX, hangerAttachmentY + 2 * $tol, hangerThickness]);
 }
 
-motorHanger();
+motorMount();

@@ -1,6 +1,6 @@
 use <motor_mount.scad>
 
-ARR = "plate";
+ARR = "assembly";
 $tol = 1;
 
 motorWidth = 42;
@@ -8,7 +8,12 @@ motorThickness = 5;
 
 hangerThickness = 8;
 
-carriageLength = 46;
+nativeCarriageLength = 46;
+controlBoxLength = 15;
+hangerInterval = nativeCarriageLength + motorWidth / 2;
+
+motorMountOffsetX = nativeCarriageLength / 2 - (controlBoxLength / 2);
+
 
 module blindsCarriage() {
   module uprightMotorHanger() {
@@ -18,11 +23,11 @@ module blindsCarriage() {
   }
 
   if (ARR == "assembly") {
-    motorMount(motorWidth, motorThickness);
+    motorMount(hangerInterval, motorWidth, motorThickness, motorMountOffsetX);
 
-    translate([carriageLength / 2, 0, 0])
+    translate([hangerInterval / 2, 0, 0])
       uprightMotorHanger();
-    translate([-carriageLength / 2, 0, 0])
+    translate([-hangerInterval / 2, 0, 0])
       uprightMotorHanger();
 
 

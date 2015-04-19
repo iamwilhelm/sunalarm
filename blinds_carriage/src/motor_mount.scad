@@ -15,7 +15,7 @@ module motorMount(length, width, wallThickness, offsetX) {
 
       // attachment plate
       translate([0, 0, wallThickness / 2])
-        cube([length, width / 2, wallThickness], center = true);
+        cube([length, width * 6 / 10, wallThickness], center = true);
     }
 
     // screw hole mounts

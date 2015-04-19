@@ -10,10 +10,10 @@ hangerThickness = 8;
 
 nativeCarriageLength = 46;
 controlBoxLength = 15;
-hangerInterval = nativeCarriageLength + motorWidth / 2;
+hangerInterval = nativeCarriageLength + motorWidth * 3 / 4;
+stubLength = 3.5;
 
-motorMountOffsetX = nativeCarriageLength / 2 - (controlBoxLength / 2);
-
+motorMountOffsetX = nativeCarriageLength / 2 - (controlBoxLength / 2) - stubLength;
 
 module blindsCarriage() {
   module uprightMotorHanger() {
